@@ -33,11 +33,9 @@ public class Adder {
 
         if ((firstNumber < 0) || (firstNumber >= maxRange)) {
             System.out.println("Pierwsza liczba jest spoza zakresu!");
-            System.exit(0);
         }
         if ((secondNumber < 0) || (secondNumber >= maxRange)) {
             System.out.println("Druga liczba jest spoza zakresu!");
-            System.exit(0);
         }
 
         MultiGate multiBitAdder = BuildAdder.buildAdder(numberOfBits);
@@ -70,7 +68,19 @@ public class Adder {
         System.out.println("A=" + firstNumberDisplay + " (" + firstNumber + "), B=" + secondNumberDisplay + " (" + secondNumber + "), C=" + outputCarryDisplay + ", S=" + outputNumberDisplay + " (" + outputNumber + ")");
     }
 
-    public String printResultForController() {
+    public String printFullResultForController() {
         return "Wynik: A=" + firstNumberDisplay + " (" + firstNumber + "), B=" + secondNumberDisplay + " (" + secondNumber + "), C=" + outputCarryDisplay + ", S=" + outputNumberDisplay + " (" + outputNumber + ")";
+    }
+
+    public String printResultForController() {
+        return "Wynik: S=" + outputNumberDisplay + " (" + outputNumber + "), C=" + outputCarryDisplay;
+    }
+
+    public String printInputA() {
+        return "A=" + firstNumberDisplay + " (" + firstNumber + ")";
+    }
+
+    public String printInputB() {
+        return "B=" + secondNumberDisplay + " (" + secondNumber + ")";
     }
 }
