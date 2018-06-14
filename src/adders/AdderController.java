@@ -9,6 +9,12 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.util.Arrays;
 
 public class AdderController {
 
@@ -25,6 +31,9 @@ public class AdderController {
 
     @FXML
     private Button closebutton;
+
+    @FXML
+    private Button loadfilebutton;
 
     @FXML
     private TextField variableA;
@@ -50,13 +59,6 @@ public class AdderController {
     @FXML
     private Label inputB;
 
-    public static Adder createAdderInstance(int type, int first, int second, int residues) {
-        if(type == 1) return new Adder(4, first, second, residues);
-        else if(type == 2) return new Adder(8, first, second, residues);
-        else System.out.println("Error: Niedostępna opcja, wyłączam program!");
-        return null;
-    }
-
     @FXML
     public void calculateSum(ActionEvent event) throws IOException {
 
@@ -68,12 +70,24 @@ public class AdderController {
             residues = Integer.parseInt(variableM.getText());
 
             if(type == 1) {
-                if(first > 16) showAlert("Pierwsza wartość jest spoza zakresu!");
-                if(second > 16) showAlert("Druga wartość jest spoza zakresu!");
+                if(first > 16) {
+                    showAlert("Pierwsza wartość jest spoza zakresu!");
+                    showErrorSignal();
+                }
+                if(second > 16) {
+                    showAlert("Druga wartość jest spoza zakresu!");
+                    showErrorSignal();
+                }
             }
-            if(type == 2) {
-                if(first > 32) showAlert("Pierwsza wartość jest spoza zakresu!");
-                if(second > 32) showAlert("Druga wartość jest spoza zakresu!");
+            else if(type == 2) {
+                if(first > 256) {
+                    showAlert("Pierwsza wartość jest spoza zakresu!");
+                    showErrorSignal();
+                }
+                if(second > 256) {
+                    showAlert("Druga wartość jest spoza zakresu!");
+                    showErrorSignal();
+                }
             }
         }
 
@@ -102,13 +116,10 @@ public class AdderController {
             inputA.setVisible(true);
             inputB.setText(adder.printInputB());
             inputB.setVisible(true);
+            Files.write(Paths.get("src/resources/outputs.txt"), Arrays.asList("Raport: " + adder.printFullResultForController() + "\n"), StandardCharsets.UTF_8, StandardOpenOption.APPEND);
         }
         else {
-            errorlabel.setVisible(true);
-            printresult.setText("");
-            inputA.setText("");
-            inputB.setText("");
-            System.out.println("Adder: ERROR SIGNAL!");
+            showErrorSignal();
         }
     }
 
@@ -118,12 +129,23 @@ public class AdderController {
         stage.close();
     }
 
-    public void setType(int type) {
-        this.type = type;
+    @FXML
+    public void getInputsFromFile(ActionEvent event) throws IOException {
+        String content = new String(Files.readAllBytes(Paths.get("src/resources/inputs.txt")));
+        String[] splitValues = content.split("\n");
+        String first = splitValues[0];
+        String second = splitValues[1];
+        String residues = splitValues[2];
+        variableA.appendText(first);
+        variableB.appendText(second);
+        variableM.appendText(residues);
     }
 
-    public int getType() {
-        return type;
+    public static Adder createAdderInstance(int type, int first, int second, int residues) {
+        if(type == 1) return new Adder(4, first, second, residues);
+        else if(type == 2) return new Adder(8, first, second, residues);
+        else System.out.println("Error: Niedostępna opcja, wyłączam program!");
+        return null;
     }
 
     public void showAlert(String msg) {
@@ -132,5 +154,17 @@ public class AdderController {
         alertInput.setHeaderText(null);
         alertInput.setContentText(msg);
         alertInput.showAndWait();
+    }
+
+    public void showErrorSignal() {
+        errorlabel.setVisible(true);
+        printresult.setText("");
+        inputA.setText("");
+        inputB.setText("");
+        System.out.println("Adder: ERROR SIGNAL!");
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 }

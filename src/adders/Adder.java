@@ -69,7 +69,7 @@ public class Adder {
     }
 
     public String printFullResultForController() {
-        return "Wynik: A=" + firstNumberDisplay + " (" + firstNumber + "), B=" + secondNumberDisplay + " (" + secondNumber + "), C=" + outputCarryDisplay + ", S=" + outputNumberDisplay + " (" + outputNumber + ")";
+        return "A=" + firstNumberDisplay + " (" + firstNumber + "), B=" + secondNumberDisplay + " (" + secondNumber + "), C=" + outputCarryDisplay + ", S=" + outputNumberDisplay + " (" + outputNumber + ")";
     }
 
     public String printResultForController() {
