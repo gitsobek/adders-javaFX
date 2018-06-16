@@ -8,13 +8,16 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Calendar;
 
 public class AdderController {
 
@@ -62,6 +65,9 @@ public class AdderController {
     @FXML
     public void calculateSum(ActionEvent event) throws IOException {
 
+        File f = new File("src/resources/outputs.txt");
+        String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
+
         if(variableA.getText().trim().equals("") || variableB.getText().trim().equals("") || variableM.getText().trim().equals("")) {
             showAlert("Musisz podać wartości początkowe!");
         } else {
@@ -70,21 +76,21 @@ public class AdderController {
             residues = Integer.parseInt(variableM.getText());
 
             if(type == 1) {
-                if(first > 16) {
+                if(first > 15) {
                     showAlert("Pierwsza wartość jest spoza zakresu!");
                     showErrorSignal();
                 }
-                if(second > 16) {
+                if(second > 15) {
                     showAlert("Druga wartość jest spoza zakresu!");
                     showErrorSignal();
                 }
             }
             else if(type == 2) {
-                if(first > 256) {
+                if(first > 255) {
                     showAlert("Pierwsza wartość jest spoza zakresu!");
                     showErrorSignal();
                 }
-                if(second > 256) {
+                if(second > 255) {
                     showAlert("Druga wartość jest spoza zakresu!");
                     showErrorSignal();
                 }
@@ -116,7 +122,11 @@ public class AdderController {
             inputA.setVisible(true);
             inputB.setText(adder.printInputB());
             inputB.setVisible(true);
-            Files.write(Paths.get("src/resources/outputs.txt"), Arrays.asList("Raport: " + adder.printFullResultForController() + "\n"), StandardCharsets.UTF_8, StandardOpenOption.APPEND);
+            if(f.exists() && !f.isDirectory()) {
+                Files.write(Paths.get("src/resources/outputs.txt"), Arrays.asList("Raport: " + adder.printFullResultForController() + "\n"), StandardCharsets.UTF_8, StandardOpenOption.APPEND);
+            } else {
+                Files.write(Paths.get("src/resources/outputs.txt"), Arrays.asList(timeStamp +  System.lineSeparator() + "Raport: " + adder.printFullResultForController() + "\n"), StandardCharsets.UTF_8);
+            }
         }
         else {
             showErrorSignal();

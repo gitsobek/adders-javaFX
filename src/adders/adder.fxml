@@ -30,7 +30,7 @@
             <Font name="System Bold" size="13.0" />
          </font>
       </Label>
-      <Label fx:id="inputA" layoutX="160.0" layoutY="6.0" />
+      <Label fx:id="inputA" layoutX="155.0" layoutY="6.0" />
       <Label fx:id="inputB" layoutX="252.0" layoutY="6.0" />
       <Label layoutX="289.0" layoutY="243.0" text="[E1]:" />
       <TextField fx:id="variableE1" layoutX="320.0" layoutY="239.0" prefHeight="25.0" prefWidth="26.0" />
