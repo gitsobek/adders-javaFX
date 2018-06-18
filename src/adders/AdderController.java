@@ -10,7 +10,6 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -70,27 +69,31 @@ public class AdderController {
 
         if(variableA.getText().trim().equals("") || variableB.getText().trim().equals("") || variableM.getText().trim().equals("")) {
             showAlert("Musisz podać wartości początkowe!");
-        } else {
-            first = Integer.parseInt(variableA.getText());
-            second = Integer.parseInt(variableB.getText());
-            residues = Integer.parseInt(variableM.getText());
+        }
+        else if(variableA.getText().matches("[a-zA-Z]+") || variableB.getText().matches("[a-zA-Z]+") || variableM.getText().matches("[a-zA-Z]+")) {
+            showAlert("Pola przyjmują tylko liczby!");
+        }
+        else {
+            first = Math.abs(Integer.parseInt(variableA.getText()));
+            second = Math.abs(Integer.parseInt(variableB.getText()));
+            residues = Math.abs(Integer.parseInt(variableM.getText()));
 
             if(type == 1) {
-                if(first > 15) {
+                if(first > 15 || first < 0) {
                     showAlert("Pierwsza wartość jest spoza zakresu!");
                     showErrorSignal();
                 }
-                if(second > 15) {
+                if(second > 15 || second < 0) {
                     showAlert("Druga wartość jest spoza zakresu!");
                     showErrorSignal();
                 }
             }
             else if(type == 2) {
-                if(first > 255) {
+                if(first > 255 || first < 0) {
                     showAlert("Pierwsza wartość jest spoza zakresu!");
                     showErrorSignal();
                 }
-                if(second > 255) {
+                if(second > 255 || second < 0) {
                     showAlert("Druga wartość jest spoza zakresu!");
                     showErrorSignal();
                 }
